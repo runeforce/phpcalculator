@@ -4,6 +4,7 @@ namespace Jakmall\Recruitment\Calculator\Commands;
 
 use Illuminate\Console\Command;
 use Jakmall\Recruitment\Calculator\Helper\Helper;
+use Carbon\Carbon;
 
 class Multiply extends Command
 {
@@ -23,6 +24,7 @@ class Multiply extends Command
         $sign = " * ";
         $result = 1;
         $return = "";
+        $historyArray = [];
 
         if($countInput < 2)
         {
@@ -49,6 +51,22 @@ class Multiply extends Command
 
         $return = $description." = ".$result;
 
+        $dataArray = 
+        [
+            'command' => 'Multiply',
+            'description' => $description,
+            'result' => $result,
+            'output' => $return,
+            'time' => Carbon::now()->format('Y-m-d H:i:s') 
+        ];
+
+        if(file_exists("history.txt"))
+            $historyArray = json_decode(file_get_contents("history.txt"), TRUE);
+        
+        array_push($historyArray, $dataArray);
+        
+        Helper::writeToFile("history.txt", $historyArray);
+      
         $this->line($return);
     }
 }

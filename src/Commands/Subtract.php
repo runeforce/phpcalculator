@@ -24,6 +24,7 @@ class Subtract extends Command
         $sign = " - ";
         $result = 0;
         $return = "";
+        $historyArray = [];
 
         if($countInput < 2)
         {
@@ -52,6 +53,22 @@ class Subtract extends Command
         }
 
         $return = $description." = ".$result;
+
+        $dataArray = 
+        [
+            'command' => 'Subtract',
+            'description' => $description,
+            'result' => $result,
+            'output' => $return,
+            'time' => Carbon::now()->format('Y-m-d H:i:s') 
+        ];
+
+        if(file_exists("history.txt"))
+            $historyArray = json_decode(file_get_contents("history.txt"), TRUE);
+        
+        array_push($historyArray, $dataArray);
+        
+        Helper::writeToFile("history.txt", $historyArray);
         
         $this->line($return);
     }
