@@ -66,7 +66,7 @@ class Multiply extends Command
         array_push($historyArray, $dataArray);
         
         Helper::writeToFile("history.txt", $historyArray);
-        
+      
         $this->line($return);
     }
 }
